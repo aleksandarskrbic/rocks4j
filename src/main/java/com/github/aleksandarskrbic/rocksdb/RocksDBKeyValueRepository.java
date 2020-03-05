@@ -1,6 +1,11 @@
 package com.github.aleksandarskrbic.rocksdb;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocksdb.exception.SerDeException;
+import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
+import com.github.aleksandarskrbic.rocksdb.mapper.RocksDBMapper;
+import com.github.aleksandarskrbic.rocksdb.mapper.RocksDBMapperFactory;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
 import org.slf4j.Logger;
@@ -12,17 +17,17 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Optional;
 
-public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnector implements KeyValueRepository<K, V> {
+public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implements KeyValueRepository<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBKeyValueRepository.class);
 
-    private final Mapper<K> keyMapper;
-    private final Mapper<V> valueMapper;
+    private final RocksDBMapper<K> keyMapper;
+    private final RocksDBMapper<V> valueMapper;
 
     public RocksDBKeyValueRepository(final RocksDBConfiguration configuration, final Class<K> keyType, final Class<V> valueType) {
         super(configuration);
-        keyMapper = new Mapper<>(keyType);
-        valueMapper = new Mapper<>(valueType);
+        keyMapper = RocksDBMapperFactory.mapperFor(keyType);
+        valueMapper = RocksDBMapperFactory.mapperFor(valueType);
     }
 
     @Override
@@ -31,10 +36,10 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnector i
             final byte[] serializedKey = keyMapper.serialize(key);
             final byte[] serializedValue = valueMapper.serialize(value);
             rocksDB.put(serializedKey, serializedValue);
-        } catch (final JsonProcessingException exception) {
+        } catch (final SerializationException exception) {
             LOGGER.error("Serialization exception occurred during save operation. {}", exception.toString());
         } catch (final RocksDBException exception) {
-            LOGGER.error("Exception occurred during save operation. {}", exception.toString());
+            LOGGER.error("RocksDBException occurred during save operation. {}", exception.toString());
         }
     }
 
@@ -44,11 +49,11 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnector i
             final byte[] serializedKey = keyMapper.serialize(key);
             final byte[] bytes = rocksDB.get(serializedKey);
             return Optional.ofNullable(valueMapper.deserialize(bytes));
-        } catch (final JsonProcessingException exception) {
+        } catch (final SerializationException exception) {
             LOGGER.error("Serialization exception occurred during findByKey operation. {}", exception.toString());
         } catch (final RocksDBException exception) {
-            LOGGER.error("Exception occurred during findByKey operation. {}", exception.toString());
-        } catch (final IOException exception) {
+            LOGGER.error("RocksDBException occurred during findByKey operation. {}", exception.toString());
+        } catch (final DeserializationException exception) {
             LOGGER.error("Deserialization exception occurred during findByKey operation. {}", exception.toString());
         }
 
@@ -80,15 +85,15 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnector i
         try {
             final byte[] serializedKey = keyMapper.serialize(key);
             rocksDB.delete(serializedKey);
-        } catch (final JsonProcessingException exception) {
-
+        } catch (final SerializationException exception) {
+            LOGGER.error("Serialization exception occurred during findByKey operation. {}", exception.toString());
         } catch (final RocksDBException exception) {
-
+            LOGGER.error("RocksDBException occurred during deleteByKey operation. {}", exception.toString());
         }
     }
 
     @Override
-    public void deleteAll() throws JsonProcessingException, RocksDBException {
+    public void deleteAll() {
 
     }
 }

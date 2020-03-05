@@ -10,13 +10,13 @@ import java.nio.file.Paths;
 
 import static java.nio.file.Files.createDirectories;
 
-public abstract class RocksDBConnector {
+public abstract class RocksDBConnection {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBConnector.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBConnection.class);
 
     protected RocksDB rocksDB;
 
-    public RocksDBConnector(final RocksDBConfiguration configuration) {
+    public RocksDBConnection(final RocksDBConfiguration configuration) {
         RocksDB.loadLibrary();
 
         try {

@@ -19,16 +19,17 @@ public class Test {
         };
 
         ItemRepository itemRepository = new ItemRepository(rocksDBConfiguration);
-        Item item = new Item();
-        item.setId(1L);
-        item.setDesc("Desc");
 
-        itemRepository.save(item.getId(), item);
+        for (int i = 0; i < 10000000; i++) {
+            Item item = new Item();
+            item.setId((long) i);
+            item.setDesc("Desc");
+            itemRepository.save(item.getId(), item);
+        }
+
         Optional<Item> byKey = itemRepository.findByKey(1L);
         Collection<Item> all = itemRepository.findAll();
-
-        assert byKey.isPresent();
-        assert !all.isEmpty();
+        System.out.println();
     }
 
     public static class ItemRepository extends RocksDBKeyValueRepository<Long, Item> {
