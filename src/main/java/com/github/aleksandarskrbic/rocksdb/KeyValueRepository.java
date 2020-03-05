@@ -1,11 +1,10 @@
 package com.github.aleksandarskrbic.rocksdb;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocksdb.exception.SerDeException;
 import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
 import org.rocksdb.RocksDBException;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -15,9 +14,9 @@ public interface KeyValueRepository<K, V> {
 
     Optional<V> findByKey(K key) throws SerDeException, RocksDBException;
 
-    Collection<V> findAll() throws IOException;
+    Collection<V> findAll() throws DeserializationException;
 
-    void deleteByKey(K key) throws JsonProcessingException, RocksDBException;
+    void deleteByKey(K key) throws SerializationException, RocksDBException;
 
-    void deleteAll();
+    void deleteAll() throws RocksDBException;
 }

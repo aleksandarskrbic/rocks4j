@@ -1,8 +1,7 @@
 package com.github.aleksandarskrbic.rocksdb;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.aleksandarskrbic.rocksdb.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
-import com.github.aleksandarskrbic.rocksdb.exception.SerDeException;
 import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
 import com.github.aleksandarskrbic.rocksdb.mapper.RocksDBMapper;
 import com.github.aleksandarskrbic.rocksdb.mapper.RocksDBMapperFactory;
@@ -11,7 +10,6 @@ import org.rocksdb.RocksIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -71,7 +69,7 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
                 final V value = valueMapper.deserialize(iterator.value());
                 result.add(value);
                 iterator.next();
-            } catch (final IOException exception) {
+            } catch (final DeserializationException exception) {
                 LOGGER.error("Deserialization exception occurred during findAll operation. {}", exception.toString());
                 return Collections.emptyList();
             }
@@ -94,6 +92,30 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
 
     @Override
     public void deleteAll() {
+        final RocksIterator iterator = rocksDB.newIterator();
 
+        iterator.seekToFirst();
+        final byte[] firstKey = getKey(iterator);
+
+        iterator.seekToLast();
+        final byte[] lastKey = getKey(iterator);
+
+        if (firstKey == null || lastKey == null) {
+            return;
+        }
+
+        try {
+            rocksDB.deleteRange(firstKey, lastKey);
+            rocksDB.delete(lastKey);
+        } catch (final RocksDBException exception) {
+            LOGGER.error("RocksDBException occurred during deleteAll operation. {}", exception.toString());
+        }
+    }
+
+    private byte[] getKey(final RocksIterator iterator) {
+        if (!iterator.isValid()) {
+            return null;
+        }
+        return iterator.key();
     }
 }

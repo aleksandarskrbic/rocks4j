@@ -1,11 +1,14 @@
 package com.github.aleksandarskrbic.rocksdb;
 
+import com.github.aleksandarskrbic.rocksdb.configuration.RocksDBConfiguration;
+import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
+
 import java.util.Collection;
 import java.util.Optional;
 
 public class Test {
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws DeserializationException {
         final RocksDBConfiguration rocksDBConfiguration = new RocksDBConfiguration() {
             @Override
             public String name() {
@@ -20,7 +23,7 @@ public class Test {
 
         ItemRepository itemRepository = new ItemRepository(rocksDBConfiguration);
 
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < 100000; i++) {
             Item item = new Item();
             item.setId((long) i);
             item.setDesc("Desc");
@@ -29,6 +32,8 @@ public class Test {
 
         Optional<Item> byKey = itemRepository.findByKey(1L);
         Collection<Item> all = itemRepository.findAll();
+        itemRepository.deleteAll();
+        all = itemRepository.findAll();
         System.out.println();
     }
 

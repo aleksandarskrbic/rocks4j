@@ -1,5 +1,6 @@
 package com.github.aleksandarskrbic.rocksdb;
 
+import com.github.aleksandarskrbic.rocksdb.configuration.RocksDBConfiguration;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.slf4j.Logger;

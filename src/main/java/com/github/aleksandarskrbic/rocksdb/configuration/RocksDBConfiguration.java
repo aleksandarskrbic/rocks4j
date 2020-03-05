@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocksdb;
+package com.github.aleksandarskrbic.rocksdb.configuration;
 
 public interface RocksDBConfiguration {
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
+
 import java.io.IOException;
 
 public final class RocksDBMapper<T> implements Mapper<T> {
