@@ -11,6 +11,9 @@ import java.nio.file.Paths;
 
 import static java.nio.file.Files.createDirectories;
 
+/**
+ *
+ */
 public abstract class RocksDBConnection {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBConnection.class);

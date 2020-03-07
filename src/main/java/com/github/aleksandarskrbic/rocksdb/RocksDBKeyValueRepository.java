@@ -1,20 +1,25 @@
 package com.github.aleksandarskrbic.rocksdb;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Optional;
+import org.rocksdb.RocksDBException;
+import org.rocksdb.RocksIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.github.aleksandarskrbic.rocksdb.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
 import com.github.aleksandarskrbic.rocksdb.mapper.RocksDBMapper;
 import com.github.aleksandarskrbic.rocksdb.mapper.RocksDBMapperFactory;
-import org.rocksdb.RocksDBException;
-import org.rocksdb.RocksIterator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Optional;
-
+/**
+ * Base class for concrete repository.
+ *
+ * @param <K> Key type.
+ * @param <V> Value type.
+ */
 public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implements KeyValueRepository<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBKeyValueRepository.class);
