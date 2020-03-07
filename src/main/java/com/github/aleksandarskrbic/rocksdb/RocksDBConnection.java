@@ -1,17 +1,16 @@
 package com.github.aleksandarskrbic.rocksdb;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import com.github.aleksandarskrbic.rocksdb.configuration.RocksDBConfiguration;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import static java.nio.file.Files.createDirectories;
 
 /**
+ * Class that is responsible for communication with RocksDB.
  *
  */
 public abstract class RocksDBConnection {
