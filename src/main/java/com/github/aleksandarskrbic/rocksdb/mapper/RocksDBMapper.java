@@ -9,7 +9,7 @@ import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
 
 /**
- * Class that provides methods for serialization and deserialization using Kryo.
+ * RocksDBMapper provides methods for serialization and deserialization using Kryo.
  *
  * @param <T> Value type that should be serialized or deserialized.
  */
