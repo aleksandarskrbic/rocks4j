@@ -1,14 +1,18 @@
 package com.github.aleksandarskrbic.rocksdb.mapper;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
+/**
+ * Class that provides methods for serialization and deserialization using Kryo.
+ *
+ * @param <T> Value type that should be serialized or deserialized.
+ */
 public final class RocksDBMapper<T> implements Mapper<T> {
 
     private final Class<T> type;
