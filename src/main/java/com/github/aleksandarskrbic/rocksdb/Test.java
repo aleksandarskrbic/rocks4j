@@ -8,7 +8,7 @@ import java.util.Optional;
 public class Test {
 
     public static void main(final String[] args) throws DeserializationException {
-        final RocksDBConfiguration rocksDBConfiguration = new RocksDBConfiguration("/data/repositories", "db");
+        final RocksDBConfiguration rocksDBConfiguration = new RocksDBConfiguration("/src/main/resources/data/repositories", "db");
 
         ItemRepository itemRepository = new ItemRepository(rocksDBConfiguration);
 

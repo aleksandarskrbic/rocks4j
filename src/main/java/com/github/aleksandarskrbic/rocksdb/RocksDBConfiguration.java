@@ -1,5 +1,10 @@
 package com.github.aleksandarskrbic.rocksdb;
 
+/**
+ * Configuration class for RocksDB.
+ * Path is path to files where data will be stored.
+ * Name is the name of repository.
+ */
 public final class RocksDBConfiguration {
 
     protected String path;

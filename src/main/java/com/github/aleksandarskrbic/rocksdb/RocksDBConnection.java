@@ -10,7 +10,6 @@ import static java.nio.file.Files.createDirectories;
 
 /**
  * Class responsible for communication with RocksDB.
- *
  */
 public abstract class RocksDBConnection {
 
@@ -24,7 +23,7 @@ public abstract class RocksDBConnection {
         try {
             final Options options = new Options().setCreateIfMissing(true);
             final String root = System.getProperty("user.dir");
-            final String rocksDirectory = root + "/src/main/resources/" + configuration.path() + "/" + configuration.name();
+            final String rocksDirectory = root + configuration.path() + "/" + configuration.name();
             final Path path = Paths.get(rocksDirectory);
             createDirectories(path);
             rocksDB = RocksDB.open(options, path.toString());
