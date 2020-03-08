@@ -3,6 +3,7 @@ package com.github.aleksandarskrbic.rocksdb.mapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
@@ -26,24 +27,24 @@ public final class RocksDBMapper<T> implements Mapper<T> {
 
     public byte[] serialize(final T t) throws SerializationException {
         try {
-            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            final Output output = new Output(byteArrayOutputStream);
+            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            final Output output = new Output(outputStream);
             kryo.writeObject(output, t);
             output.flush();
             output.close();
-            return byteArrayOutputStream.toByteArray();
-        } catch (final Exception exception) {
-            throw new SerializationException(exception.getMessage());
+            return outputStream.toByteArray();
+        } catch (final IllegalArgumentException | KryoException exception) {
+            throw new SerializationException(exception.getMessage(), exception);
         }
     }
 
     public T deserialize(final byte[] bytes) throws DeserializationException {
         try {
-            final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-            final Input input = new Input(byteArrayInputStream);
+            final ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+            final Input input = new Input(inputStream);
             return kryo.readObject(input, type);
-        } catch (final Exception exception) {
-            throw new DeserializationException(exception.getMessage());
+        } catch (final IllegalArgumentException | KryoException exception) {
+            throw new DeserializationException(exception.getMessage(), exception);
         }
     }
 }

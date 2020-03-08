@@ -1,6 +1,5 @@
 package com.github.aleksandarskrbic.rocksdb;
 
-import com.github.aleksandarskrbic.rocksdb.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
 
 import java.util.Collection;
@@ -9,17 +8,7 @@ import java.util.Optional;
 public class Test {
 
     public static void main(final String[] args) throws DeserializationException {
-        final RocksDBConfiguration rocksDBConfiguration = new RocksDBConfiguration() {
-            @Override
-            public String name() {
-                return "db";
-            }
-
-            @Override
-            public String path() {
-                return "/data/repositories";
-            }
-        };
+        final RocksDBConfiguration rocksDBConfiguration = new RocksDBConfiguration("/data/repositories", "db");
 
         ItemRepository itemRepository = new ItemRepository(rocksDBConfiguration);
 
