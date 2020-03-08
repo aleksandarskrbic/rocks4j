@@ -1,7 +1,7 @@
-package com.github.aleksandarskrbic.rocksdb.mapper;
+package com.github.aleksandarskrbic.rocks4j.mapper;
 
-import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
-import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
+import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
 
 /**
  * Interface that defines methods for mapping to bytes.

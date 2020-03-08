@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocksdb.exception;
+package com.github.aleksandarskrbic.rocks4j.exception;
 
 /**
  * This exception is thrown when there is a problem with deserialization.

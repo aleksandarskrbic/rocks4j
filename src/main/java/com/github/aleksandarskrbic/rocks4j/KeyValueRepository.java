@@ -1,10 +1,10 @@
-package com.github.aleksandarskrbic.rocksdb;
+package com.github.aleksandarskrbic.rocks4j;
 
 import java.util.Collection;
 import java.util.Optional;
-import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
-import com.github.aleksandarskrbic.rocksdb.exception.SerDeException;
-import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
+import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocks4j.exception.SerDeException;
+import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
 import org.rocksdb.RocksDBException;
 
 /**

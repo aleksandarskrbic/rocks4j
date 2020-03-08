@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocksdb.exception;
+package com.github.aleksandarskrbic.rocks4j.exception;
 
 import java.io.IOException;
 

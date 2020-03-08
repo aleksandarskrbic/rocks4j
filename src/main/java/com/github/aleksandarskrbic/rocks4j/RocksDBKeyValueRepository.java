@@ -1,13 +1,13 @@
-package com.github.aleksandarskrbic.rocksdb;
+package com.github.aleksandarskrbic.rocks4j;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Optional;
-import com.github.aleksandarskrbic.rocksdb.mapper.Mapper;
-import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
-import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
-import com.github.aleksandarskrbic.rocksdb.mapper.RocksDBMapperFactory;
+import com.github.aleksandarskrbic.rocks4j.mapper.Mapper;
+import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
+import com.github.aleksandarskrbic.rocks4j.mapper.RocksDBMapperFactory;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
 import org.slf4j.Logger;

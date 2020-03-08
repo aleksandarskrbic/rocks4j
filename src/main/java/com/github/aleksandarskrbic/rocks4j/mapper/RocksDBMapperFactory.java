@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocksdb.mapper;
+package com.github.aleksandarskrbic.rocks4j.mapper;
 
 public abstract class RocksDBMapperFactory {
 

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.aleksandarskrbic</groupId>
-    <artifactId>rocksdb-4j</artifactId>
+    <artifactId>rocks4j</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>

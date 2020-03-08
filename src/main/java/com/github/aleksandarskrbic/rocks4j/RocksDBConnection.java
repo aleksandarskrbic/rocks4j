@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocksdb;
+package com.github.aleksandarskrbic.rocks4j;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
