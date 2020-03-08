@@ -1,5 +1,8 @@
 package com.github.aleksandarskrbic.rocksdb.exception;
 
+/**
+ * This exception is thrown when there is a problem with serialization.
+ */
 public final class SerializationException extends SerDeException {
 
     public SerializationException(final String message) {

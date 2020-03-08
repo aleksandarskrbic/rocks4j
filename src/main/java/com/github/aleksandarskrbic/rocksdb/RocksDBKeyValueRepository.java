@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Optional;
 import com.github.aleksandarskrbic.rocksdb.mapper.Mapper;
-import com.github.aleksandarskrbic.rocksdb.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocksdb.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
 import com.github.aleksandarskrbic.rocksdb.mapper.RocksDBMapperFactory;

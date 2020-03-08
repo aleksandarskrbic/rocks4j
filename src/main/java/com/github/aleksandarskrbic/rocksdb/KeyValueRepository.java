@@ -8,7 +8,7 @@ import com.github.aleksandarskrbic.rocksdb.exception.SerializationException;
 import org.rocksdb.RocksDBException;
 
 /**
- *  Interface that defines operations against Key-Value Store
+ *  Interface that defines operations against Key-Value Store.
  *
  * @param <K> Key type.
  * @param <V> Value type.
