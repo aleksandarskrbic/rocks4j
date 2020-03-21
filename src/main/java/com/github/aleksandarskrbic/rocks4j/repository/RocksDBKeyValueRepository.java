@@ -6,8 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Optional;
-import com.github.aleksandarskrbic.rocks4j.RocksDBConfiguration;
-import com.github.aleksandarskrbic.rocks4j.RocksDBConnection;
+import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
+import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConnection;
 import com.github.aleksandarskrbic.rocks4j.kv.KeyValueRepository;
 import com.github.aleksandarskrbic.rocks4j.mapper.Mapper;
 import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
@@ -39,8 +39,8 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
      */
     public RocksDBKeyValueRepository(final RocksDBConfiguration configuration) {
         super(configuration);
-        keyMapper = RocksDBMapperFactory.mapperFor(extractKeyType());
-        valueMapper = RocksDBMapperFactory.mapperFor(extractValueType());
+        this.keyMapper = RocksDBMapperFactory.mapperFor(extractKeyType());
+        this.valueMapper = RocksDBMapperFactory.mapperFor(extractValueType());
     }
 
     /**
