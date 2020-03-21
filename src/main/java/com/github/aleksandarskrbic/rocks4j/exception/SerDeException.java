@@ -11,7 +11,10 @@ public abstract class SerDeException extends IOException {
         super(message);
     }
 
-    public SerDeException(final String message, final Throwable throwable) {
+    public SerDeException(
+            final String message,
+            final Throwable throwable
+    ) {
         super(message, throwable);
     }
 }

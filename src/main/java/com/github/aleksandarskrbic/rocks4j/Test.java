@@ -29,7 +29,7 @@ public class Test {
     public static class ItemRepository extends RocksDBKeyValueRepository<Long, Item> {
 
         public ItemRepository(final RocksDBConfiguration configuration) {
-            super(configuration, Long.class, Item.class);
+            super(configuration);
         }
     }
 

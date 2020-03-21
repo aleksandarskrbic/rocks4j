@@ -1,5 +1,7 @@
 package com.github.aleksandarskrbic.rocks4j;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -26,22 +28,63 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
     private final Mapper<K> keyMapper;
     private final Mapper<V> valueMapper;
 
-    public RocksDBKeyValueRepository(final RocksDBConfiguration configuration, final Class<K> keyType, final Class<V> valueType) {
+    /**
+     * Default constructor which automatically infers key and value types needed for mapper creation.
+     * Uses {@link com.github.aleksandarskrbic.rocks4j.mapper.RocksDBMapper}.
+     *
+     * @param configuration for {@link RocksDBConnection}.
+     */
+    public RocksDBKeyValueRepository(final RocksDBConfiguration configuration) {
         super(configuration);
-        keyMapper = RocksDBMapperFactory.mapperFor(keyType);
-        valueMapper = RocksDBMapperFactory.mapperFor(valueType);
+        keyMapper = RocksDBMapperFactory.mapperFor(extractKeyType());
+        valueMapper = RocksDBMapperFactory.mapperFor(extractValueType());
+    }
+
+    /**
+     *
+     * @param configuration for {@link RocksDBConnection}.
+     * @param keyType for mapper.
+     * @param valueType for mapper.
+     */
+    public RocksDBKeyValueRepository(
+            final RocksDBConfiguration configuration,
+            final Class<K> keyType,
+            final Class<V> valueType
+    ) {
+        super(configuration);
+        this.keyMapper = RocksDBMapperFactory.mapperFor(keyType);
+        this.valueMapper = RocksDBMapperFactory.mapperFor(valueType);
+    }
+
+    /**
+     *
+     * @param configuration for {@link RocksDBConnection}.
+     * @param keyMapper custom key mapper that implements {@link Mapper}.
+     * @param valueMapper custom value mapper that implements {@link Mapper}.
+     */
+    public RocksDBKeyValueRepository(
+            final RocksDBConfiguration configuration,
+            final Mapper<K> keyMapper,
+            final Mapper<V> valueMapper
+    ) {
+        super(configuration);
+        this.keyMapper = keyMapper;
+        this.valueMapper = valueMapper;
     }
 
     @Override
-    public synchronized void save(final K key, final V value) {
+    public synchronized void save(
+            final K key,
+            final V value
+    ) {
         try {
             final byte[] serializedKey = keyMapper.serialize(key);
             final byte[] serializedValue = valueMapper.serialize(value);
             rocksDB.put(serializedKey, serializedValue);
         } catch (final SerializationException exception) {
-            LOGGER.error("Serialization exception occurred during save operation. {}", exception.toString());
+            LOGGER.error("Serialization exception occurred during save operation. {}", exception.getMessage());
         } catch (final RocksDBException exception) {
-            LOGGER.error("RocksDBException occurred during save operation. {}", exception.toString());
+            LOGGER.error("RocksDBException occurred during save operation. {}", exception.getMessage());
         }
     }
 
@@ -52,11 +95,11 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
             final byte[] bytes = rocksDB.get(serializedKey);
             return Optional.ofNullable(valueMapper.deserialize(bytes));
         } catch (final SerializationException exception) {
-            LOGGER.error("Serialization exception occurred during findByKey operation. {}", exception.toString());
+            LOGGER.error("Serialization exception occurred during findByKey operation. {}", exception.getMessage());
         } catch (final RocksDBException exception) {
-            LOGGER.error("RocksDBException occurred during findByKey operation. {}", exception.toString());
+            LOGGER.error("RocksDBException occurred during findByKey operation. {}", exception.getMessage());
         } catch (final DeserializationException exception) {
-            LOGGER.error("Deserialization exception occurred during findByKey operation. {}", exception.toString());
+            LOGGER.error("Deserialization exception occurred during findByKey operation. {}", exception.getMessage());
         }
 
         return Optional.empty();
@@ -74,10 +117,13 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
                 result.add(value);
                 iterator.next();
             } catch (final DeserializationException exception) {
-                LOGGER.error("Deserialization exception occurred during findAll operation. {}", exception.toString());
+                LOGGER.error("Deserialization exception occurred during findAll operation. {}", exception.getMessage());
+                iterator.close();
                 return Collections.emptyList();
             }
         }
+
+        iterator.close();
 
         return result;
     }
@@ -88,9 +134,9 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
             final byte[] serializedKey = keyMapper.serialize(key);
             rocksDB.delete(serializedKey);
         } catch (final SerializationException exception) {
-            LOGGER.error("Serialization exception occurred during findByKey operation. {}", exception.toString());
+            LOGGER.error("Serialization exception occurred during findByKey operation. {}", exception.getMessage());
         } catch (final RocksDBException exception) {
-            LOGGER.error("RocksDBException occurred during deleteByKey operation. {}", exception.toString());
+            LOGGER.error("RocksDBException occurred during deleteByKey operation. {}", exception.getMessage());
         }
     }
 
@@ -112,7 +158,7 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
             rocksDB.deleteRange(firstKey, lastKey);
             rocksDB.delete(lastKey);
         } catch (final RocksDBException exception) {
-            LOGGER.error("RocksDBException occurred during deleteAll operation. {}", exception.toString());
+            LOGGER.error("RocksDBException occurred during deleteAll operation. {}", exception.getMessage());
         }
     }
 
@@ -121,5 +167,33 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
             return null;
         }
         return iterator.key();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Class<K> extractKeyType() {
+        return (Class<K>) extractClass(((ParameterizedType) getGenericSuperClass()).getActualTypeArguments()[0]);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Class<V> extractValueType() {
+        return (Class<V>) extractClass(((ParameterizedType) getGenericSuperClass()).getActualTypeArguments()[1]);
+    }
+
+    private Type getGenericSuperClass() {
+        final Type superClass = getClass().getGenericSuperclass();
+
+        if (superClass instanceof Class<?>) {
+            throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
+        }
+
+        return superClass;
+    }
+
+    private Class<?> extractClass(final Type type) {
+        if (type instanceof Class) {
+            return (Class<?>) type;
+        }
+
+        throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
     }
 }
