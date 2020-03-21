@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j;
+package com.github.aleksandarskrbic.rocks4j.repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Optional;
+import com.github.aleksandarskrbic.rocks4j.RocksDBConfiguration;
+import com.github.aleksandarskrbic.rocks4j.RocksDBConnection;
+import com.github.aleksandarskrbic.rocks4j.kv.KeyValueRepository;
 import com.github.aleksandarskrbic.rocks4j.mapper.Mapper;
 import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
