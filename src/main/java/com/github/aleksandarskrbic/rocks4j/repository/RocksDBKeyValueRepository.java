@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j;
+package com.github.aleksandarskrbic.rocks4j.repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Optional;
+import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
+import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConnection;
+import com.github.aleksandarskrbic.rocks4j.kv.KeyValueRepository;
 import com.github.aleksandarskrbic.rocks4j.mapper.Mapper;
 import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
@@ -36,8 +39,8 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
      */
     public RocksDBKeyValueRepository(final RocksDBConfiguration configuration) {
         super(configuration);
-        keyMapper = RocksDBMapperFactory.mapperFor(extractKeyType());
-        valueMapper = RocksDBMapperFactory.mapperFor(extractValueType());
+        this.keyMapper = RocksDBMapperFactory.mapperFor(extractKeyType());
+        this.valueMapper = RocksDBMapperFactory.mapperFor(extractValueType());
     }
 
     /**

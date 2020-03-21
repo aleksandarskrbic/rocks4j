@@ -1,6 +1,8 @@
 package com.github.aleksandarskrbic.rocks4j;
 
+import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocks4j.repository.RocksDBKeyValueRepository;
 
 import java.util.Collection;
 import java.util.Optional;

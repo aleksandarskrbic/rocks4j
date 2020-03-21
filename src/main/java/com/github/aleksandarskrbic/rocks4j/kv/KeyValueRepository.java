@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j;
+package com.github.aleksandarskrbic.rocks4j.kv;
 
 import java.util.Collection;
 import java.util.Optional;
