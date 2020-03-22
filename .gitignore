@@ -11,4 +11,4 @@
 log/
 target/
 
-src/main/java/resources/data
+src/main/java/resources/data/*
