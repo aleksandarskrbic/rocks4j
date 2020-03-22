@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * @param <K> Key type.
  * @param <V> Value type.
  */
-public class AsyncRocksDBKeyValueRepository<K, V> extends RocksDBConnection implements AsyncKeyValueRepository<K, V> {
+public class AsyncRocksDBKeyValueRepository<K, V> implements AsyncKeyValueRepository<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AsyncRocksDBKeyValueRepository.class);
 
@@ -34,8 +34,7 @@ public class AsyncRocksDBKeyValueRepository<K, V> extends RocksDBConnection impl
      * @param configuration for {@link RocksDBConnection}.
      */
     public AsyncRocksDBKeyValueRepository(final RocksDBConfiguration configuration) {
-        super(configuration);
-        this.repository = new RocksDBKeyValueRepository<>(configuration);
+        this.repository = new RocksDBKeyValueRepository<>(configuration, extractKeyType(), extractValueType());
         this.executorService = Executors.newFixedThreadPool(configuration.threadCount());
     }
 
@@ -50,7 +49,6 @@ public class AsyncRocksDBKeyValueRepository<K, V> extends RocksDBConnection impl
             final Class<K> keyType,
             final Class<V> valueType
     ) {
-        super(configuration);
         this.repository = new RocksDBKeyValueRepository<>(configuration, keyType, valueType);
         this.executorService = Executors.newFixedThreadPool(configuration.threadCount());
     }
@@ -66,7 +64,6 @@ public class AsyncRocksDBKeyValueRepository<K, V> extends RocksDBConnection impl
             final Mapper<K> keyMapper,
             final Mapper<V> valueMapper
     ) {
-        super(configuration);
         this.repository = new RocksDBKeyValueRepository<>(configuration, keyMapper, valueMapper);
         this.executorService = Executors.newFixedThreadPool(configuration.threadCount());
     }
