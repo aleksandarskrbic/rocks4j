@@ -1,31 +1,31 @@
 package com.github.aleksandarskrbic.rocks4j;
 
+import java.util.Collection;
+import java.util.Optional;
 import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocks4j.repository.RocksDBKeyValueRepository;
-
-import java.util.Collection;
-import java.util.Optional;
 
 public class Test {
 
     public static void main(final String[] args) throws DeserializationException {
         final RocksDBConfiguration rocksDBConfiguration = new RocksDBConfiguration("/src/main/resources/data/repositories", "db");
 
-        ItemRepository itemRepository = new ItemRepository(rocksDBConfiguration);
+        final ItemRepository itemRepository = new ItemRepository(rocksDBConfiguration);
 
         for (int i = 0; i < 100000; i++) {
-            Item item = new Item();
+            final Item item = new Item();
             item.setId((long) i);
             item.setDesc("Desc");
             itemRepository.save(item.getId(), item);
         }
 
-        Optional<Item> byKey = itemRepository.findByKey(1L);
+        final Optional<Item> byKey = itemRepository.findByKey(1L);
         Collection<Item> all = itemRepository.findAll();
+        System.out.println("all size " + all.size());
         itemRepository.deleteAll();
         all = itemRepository.findAll();
-        System.out.println();
+        System.out.println("all size after delete " + all.size());
     }
 
     public static class ItemRepository extends RocksDBKeyValueRepository<Long, Item> {
