@@ -17,11 +17,10 @@ import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
 public final class RocksDBMapper<T> implements Mapper<T> {
 
     private final Class<T> type;
-    private final Kryo kryo;
+    private final Kryo kryo = new Kryo();
 
     public RocksDBMapper(final Class<T> type) {
         this.type = type;
-        this.kryo = new Kryo();
         kryo.register(type);
     }
 

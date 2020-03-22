@@ -8,10 +8,10 @@ import java.util.LinkedList;
 import java.util.Optional;
 import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConnection;
-import com.github.aleksandarskrbic.rocks4j.kv.KeyValueRepository;
-import com.github.aleksandarskrbic.rocks4j.mapper.Mapper;
 import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
+import com.github.aleksandarskrbic.rocks4j.kv.KeyValueRepository;
+import com.github.aleksandarskrbic.rocks4j.mapper.Mapper;
 import com.github.aleksandarskrbic.rocks4j.mapper.RocksDBMapperFactory;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * @param <K> Key type.
  * @param <V> Value type.
  */
-public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implements KeyValueRepository<K, V> {
+public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implements KeyValueRepository<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBKeyValueRepository.class);
 
@@ -76,7 +76,7 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
     }
 
     @Override
-    public synchronized void save(
+    public void save(
             final K key,
             final V value
     ) {
@@ -104,7 +104,6 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
         } catch (final DeserializationException exception) {
             LOGGER.error("Deserialization exception occurred during findByKey operation. {}", exception.getMessage());
         }
-
         return Optional.empty();
     }
 
@@ -114,19 +113,18 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
         final RocksIterator iterator = rocksDB.newIterator();
         iterator.seekToFirst();
 
-        while (iterator.isValid()) {
-            try {
+        try {
+            while (iterator.isValid()) {
                 final V value = valueMapper.deserialize(iterator.value());
                 result.add(value);
                 iterator.next();
-            } catch (final DeserializationException exception) {
-                LOGGER.error("Deserialization exception occurred during findAll operation. {}", exception.getMessage());
-                iterator.close();
-                return Collections.emptyList();
             }
+        } catch (final DeserializationException exception) {
+            LOGGER.error("Deserialization exception occurred during findAll operation. {}", exception.getMessage());
+            return Collections.emptyList();
+        } finally {
+            iterator.close();
         }
-
-        iterator.close();
 
         return result;
     }
@@ -162,6 +160,8 @@ public abstract class RocksDBKeyValueRepository<K, V> extends RocksDBConnection 
             rocksDB.delete(lastKey);
         } catch (final RocksDBException exception) {
             LOGGER.error("RocksDBException occurred during deleteAll operation. {}", exception.getMessage());
+        } finally {
+            iterator.close();
         }
     }
 
