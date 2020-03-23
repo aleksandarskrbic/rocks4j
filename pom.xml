@@ -19,7 +19,13 @@
             </plugin>
         </plugins>
     </build>
-
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>KV Store for Java backed by RocksDB</name>
+            <url>https://maven.pkg.github.com/aleksandarskrbic/rocks4j</url>
+        </repository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.rocksdb</groupId>
