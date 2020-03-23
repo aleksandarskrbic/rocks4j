@@ -11,6 +11,7 @@ import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConnection;
 import com.github.aleksandarskrbic.rocks4j.kv.AsyncKeyValueRepository;
 import com.github.aleksandarskrbic.rocks4j.mapper.Mapper;
+import com.google.common.annotations.Beta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
  * @param <K> Key type.
  * @param <V> Value type.
  */
+@Beta
 public class AsyncRocksDBKeyValueRepository<K, V> implements AsyncKeyValueRepository<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AsyncRocksDBKeyValueRepository.class);
