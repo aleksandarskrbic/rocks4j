@@ -3,16 +3,20 @@ package com.github.aleksandarskrbic.rocks4j.repository;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Optional;
 import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConnection;
-import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
-import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
 import com.github.aleksandarskrbic.rocks4j.kv.KeyValueRepository;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteAllFailedException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteFailedException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.FindFailedException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.SaveFailedException;
 import com.github.aleksandarskrbic.rocks4j.mapper.Mapper;
 import com.github.aleksandarskrbic.rocks4j.mapper.RocksDBMapperFactory;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerDeException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerializationException;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
 import org.slf4j.Logger;
@@ -79,36 +83,40 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
     public void save(
             final K key,
             final V value
-    ) {
+    ) throws SerializationException, SaveFailedException {
         try {
             final byte[] serializedKey = keyMapper.serialize(key);
             final byte[] serializedValue = valueMapper.serialize(value);
             rocksDB.put(serializedKey, serializedValue);
         } catch (final SerializationException exception) {
             LOGGER.error("Serialization exception occurred during save operation. {}", exception.getMessage());
+            throw exception;
         } catch (final RocksDBException exception) {
             LOGGER.error("RocksDBException occurred during save operation. {}", exception.getMessage());
+            throw new SaveFailedException(exception.getMessage(), exception);
         }
     }
 
     @Override
-    public Optional<V> findByKey(final K key) {
+    public Optional<V> findByKey(final K key) throws SerDeException, FindFailedException {
         try {
             final byte[] serializedKey = keyMapper.serialize(key);
             final byte[] bytes = rocksDB.get(serializedKey);
             return Optional.ofNullable(valueMapper.deserialize(bytes));
         } catch (final SerializationException exception) {
             LOGGER.error("Serialization exception occurred during findByKey operation. {}", exception.getMessage());
+            throw exception;
         } catch (final RocksDBException exception) {
             LOGGER.error("RocksDBException occurred during findByKey operation. {}", exception.getMessage());
+            throw new FindFailedException(exception.getMessage(), exception);
         } catch (final DeserializationException exception) {
             LOGGER.error("Deserialization exception occurred during findByKey operation. {}", exception.getMessage());
+            throw exception;
         }
-        return Optional.empty();
     }
 
     @Override
-    public Collection<V> findAll() {
+    public Collection<V> findAll() throws DeserializationException {
         final Collection<V> result = new LinkedList<>();
         final RocksIterator iterator = rocksDB.newIterator();
         iterator.seekToFirst();
@@ -121,7 +129,7 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
             }
         } catch (final DeserializationException exception) {
             LOGGER.error("Deserialization exception occurred during findAll operation. {}", exception.getMessage());
-            return Collections.emptyList();
+            throw exception;
         } finally {
             iterator.close();
         }
@@ -130,19 +138,21 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
     }
 
     @Override
-    public void deleteByKey(final K key) {
+    public void deleteByKey(final K key) throws SerializationException, DeleteFailedException {
         try {
             final byte[] serializedKey = keyMapper.serialize(key);
             rocksDB.delete(serializedKey);
         } catch (final SerializationException exception) {
             LOGGER.error("Serialization exception occurred during findByKey operation. {}", exception.getMessage());
+            throw exception;
         } catch (final RocksDBException exception) {
             LOGGER.error("RocksDBException occurred during deleteByKey operation. {}", exception.getMessage());
+            throw new DeleteFailedException(exception.getMessage(), exception);
         }
     }
 
     @Override
-    public void deleteAll() {
+    public void deleteAll() throws DeleteAllFailedException {
         final RocksIterator iterator = rocksDB.newIterator();
 
         iterator.seekToFirst();
@@ -160,6 +170,7 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
             rocksDB.delete(lastKey);
         } catch (final RocksDBException exception) {
             LOGGER.error("RocksDBException occurred during deleteAll operation. {}", exception.getMessage());
+            throw new DeleteAllFailedException(exception.getMessage(), exception);
         } finally {
             iterator.close();
         }

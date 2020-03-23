@@ -6,8 +6,8 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
-import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerializationException;
 
 /**
  * RocksDBMapper provides methods for serialization and deserialization using Kryo.

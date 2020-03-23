@@ -75,27 +75,27 @@ public class AsyncRocksDBKeyValueRepository<K, V> implements AsyncKeyValueReposi
             final K key,
             final V value
     ) {
-        return CompletableFuture.runAsync(() -> repository.save(key, value), executorService);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public CompletableFuture<Optional<V>> findByKey(final K key) {
-        return CompletableFuture.supplyAsync(() -> repository.findByKey(key), executorService);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public CompletableFuture<Collection<V>> findAll() {
-        return CompletableFuture.supplyAsync(repository::findAll, executorService);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public CompletableFuture<Void> deleteByKey(final K key) {
-        return CompletableFuture.runAsync(() -> repository.deleteByKey(key), executorService);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public CompletableFuture<Void> deleteAll() {
-        return CompletableFuture.runAsync(repository::deleteAll, executorService);
+        throw new UnsupportedOperationException();
     }
 
     @SuppressWarnings("unchecked")

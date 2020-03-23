@@ -3,9 +3,10 @@ package com.github.aleksandarskrbic.rocks4j.kv;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
-import com.github.aleksandarskrbic.rocks4j.exception.SerDeException;
-import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerDeException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerializationException;
+import com.google.common.annotations.Beta;
 import org.rocksdb.RocksDBException;
 
 /**
@@ -14,6 +15,7 @@ import org.rocksdb.RocksDBException;
  * @param <K> Key type.
  * @param <V> Value type.
  */
+@Beta
 public interface AsyncKeyValueRepository<K, V> {
 
     /**
