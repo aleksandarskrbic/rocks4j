@@ -1,7 +1,7 @@
-package com.github.aleksandarskrbic.rocks4j.exception;
+package com.github.aleksandarskrbic.rocks4j.mapper.exception;
 
 /**
- * This exception is thrown when there is a problem with deserialization.
+ * {@link DeserializationException}  is thrown when there is a problem with deserialization.
  */
 public final class DeserializationException extends SerDeException {
 

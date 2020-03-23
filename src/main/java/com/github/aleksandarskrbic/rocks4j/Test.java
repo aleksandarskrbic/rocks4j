@@ -3,12 +3,15 @@ package com.github.aleksandarskrbic.rocks4j;
 import java.util.Collection;
 import java.util.Optional;
 import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
-import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteAllFailedException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.FindFailedException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.SaveFailedException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerDeException;
 import com.github.aleksandarskrbic.rocks4j.repository.RocksDBKeyValueRepository;
 
 public class Test {
 
-    public static void main(final String[] args) throws DeserializationException {
+    public static void main(final String[] args) throws SerDeException, SaveFailedException, DeleteAllFailedException, FindFailedException {
         final RocksDBConfiguration rocksDBConfiguration = new RocksDBConfiguration("/src/main/resources/data/repositories", "db");
 
         final ItemRepository itemRepository = new ItemRepository(rocksDBConfiguration);

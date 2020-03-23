@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j.exception;
+package com.github.aleksandarskrbic.rocks4j.mapper.exception;
 
 import java.io.IOException;
 

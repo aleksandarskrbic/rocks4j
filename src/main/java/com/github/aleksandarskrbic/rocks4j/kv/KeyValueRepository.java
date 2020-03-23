@@ -2,10 +2,13 @@ package com.github.aleksandarskrbic.rocks4j.kv;
 
 import java.util.Collection;
 import java.util.Optional;
-import com.github.aleksandarskrbic.rocks4j.exception.DeserializationException;
-import com.github.aleksandarskrbic.rocks4j.exception.SerDeException;
-import com.github.aleksandarskrbic.rocks4j.exception.SerializationException;
-import org.rocksdb.RocksDBException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteAllFailedException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteFailedException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.FindFailedException;
+import com.github.aleksandarskrbic.rocks4j.kv.exception.SaveFailedException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.DeserializationException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerDeException;
+import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerializationException;
 
 /**
  *  Interface that defines operations against Key-Value Store.
@@ -21,9 +24,9 @@ public interface KeyValueRepository<K, V> {
      * @param key of value.
      * @param value that should be persisted.
      * @throws SerializationException when it's not possible to serialize entity.
-     * @throws RocksDBException when it's not possible to persist entity.
+     * @throws SaveFailedException when it's not possible to persist entity.
      */
-    void save(K key, V value) throws SerializationException, RocksDBException;
+    void save(K key, V value) throws SerializationException, SaveFailedException;
 
     /**
      * Try to find value for a given key.
@@ -31,9 +34,9 @@ public interface KeyValueRepository<K, V> {
      * @param key of entity that should be retrieved.
      * @return Optional of entity.
      * @throws SerDeException when it's not possible to serialize/deserialize entity.
-     * @throws RocksDBException when it's not possible to retrieve a wanted entity.
+     * @throws FindFailedException when it's not possible to retrieve a wanted entity.
      */
-    Optional<V> findByKey(K key) throws SerDeException, RocksDBException;
+    Optional<V> findByKey(K key) throws SerDeException, FindFailedException;
 
     /**
      * Try to find all entities from repository.
@@ -48,14 +51,14 @@ public interface KeyValueRepository<K, V> {
      *
      * @param key of entity that should be deleted.
      * @throws SerializationException when it's not possible to serialize entity.
-     * @throws RocksDBException when it's not possible to delete a wanted entity.
+     * @throws DeleteFailedException when it's not possible to delete a wanted entity.
      */
-    void deleteByKey(K key) throws SerializationException, RocksDBException;
+    void deleteByKey(K key) throws SerializationException, DeleteFailedException;
 
     /**
      * Deletes all entities from RocksDB.
      *
-     * @throws RocksDBException when it's not possible to delete entity.
+     * @throws DeleteAllFailedException when it's not possible to delete all entities.
      */
-    void deleteAll() throws RocksDBException;
+    void deleteAll() throws DeleteAllFailedException;
 }
