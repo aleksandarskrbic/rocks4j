@@ -111,3 +111,6 @@ public static class ItemRepository extends RocksDBKeyValueRepository<Long, Item>
     // other methods
 }
 ```
+## Credits
+
+Special thanks to [@jovicaandric](https://github.com/jovicaandric) and [@vajda](https://github.com/vajda).
