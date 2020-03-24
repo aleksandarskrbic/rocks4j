@@ -104,6 +104,13 @@
         </developer>
     </developers>
 
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+        </license>
+    </licenses>
+
     <scm>
         <connection>scm:git:git://github.com/aleksandarskrbic/rocks4j.git</connection>
         <developerConnection>scm:git:ssh://github.com:aleksandarskrbic/rocks4j.git</developerConnection>
