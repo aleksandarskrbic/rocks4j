@@ -7,9 +7,12 @@ package com.github.aleksandarskrbic.rocks4j.configuration;
  */
 public class RocksDBConfiguration {
 
-    protected final String path;
-    protected final String name;
+    protected String path;
+    protected String name;
     protected int threadCount = 5;
+
+    public RocksDBConfiguration() {
+    }
 
     public RocksDBConfiguration(
             final String path,
@@ -33,12 +36,24 @@ public class RocksDBConfiguration {
         return path;
     }
 
+    public void setPath(final String path) {
+        this.path = path;
+    }
+
     public String name() {
         return name;
     }
 
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     public int threadCount() {
         return threadCount;
+    }
+
+    public void setThreadCount(final int threadCount) {
+        this.threadCount = threadCount;
     }
 
     public String url() {
