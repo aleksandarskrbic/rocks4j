@@ -5,7 +5,7 @@ package com.github.aleksandarskrbic.rocks4j.configuration;
  * Path is path to files where data will be stored.
  * Name is the name of repository.
  */
-public final class RocksDBConfiguration {
+public class RocksDBConfiguration {
 
     protected final String path;
     protected final String name;
