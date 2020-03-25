@@ -6,7 +6,7 @@
 
     <groupId>com.github.aleksandarskrbic</groupId>
     <artifactId>rocks4j</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <build>
         <plugins>
             <plugin>
@@ -114,7 +114,7 @@
     <scm>
         <connection>scm:git:git://github.com/aleksandarskrbic/rocks4j.git</connection>
         <developerConnection>scm:git:ssh://github.com:aleksandarskrbic/rocks4j.git</developerConnection>
-        <url>http://github.com/aleksandarskrbic/rocks4j/tree/1.1.0</url>
+        <url>http://github.com/aleksandarskrbic/rocks4j/tree/1.1.1</url>
     </scm>
 
     <dependencies>
