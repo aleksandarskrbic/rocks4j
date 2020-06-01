@@ -9,10 +9,7 @@ public abstract class RocksIOException extends Exception {
         super(message);
     }
 
-    public RocksIOException(
-            final String message,
-            final Throwable throwable
-    ) {
+    public RocksIOException(final String message, final Throwable throwable) {
         super(message, throwable);
     }
 }

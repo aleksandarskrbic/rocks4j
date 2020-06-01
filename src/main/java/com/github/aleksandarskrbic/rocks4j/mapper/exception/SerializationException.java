@@ -9,10 +9,7 @@ public final class SerializationException extends SerDeException {
         super(message);
     }
 
-    public SerializationException(
-            final String message,
-            final Throwable throwable
-    ) {
+    public SerializationException(final String message, final Throwable throwable) {
         super(message, throwable);
     }
 }

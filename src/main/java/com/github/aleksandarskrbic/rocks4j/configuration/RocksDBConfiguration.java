@@ -14,19 +14,12 @@ public class RocksDBConfiguration {
     public RocksDBConfiguration() {
     }
 
-    public RocksDBConfiguration(
-            final String path,
-            final String name
-    ) {
+    public RocksDBConfiguration(final String path, final String name) {
         this.path = path;
         this.name = name;
     }
 
-    public RocksDBConfiguration(
-            final String path,
-            final String name,
-            final int threadCount
-    ) {
+    public RocksDBConfiguration(final String path, final String name, final int threadCount) {
         this.path = path;
         this.name = name;
         this.threadCount = threadCount;

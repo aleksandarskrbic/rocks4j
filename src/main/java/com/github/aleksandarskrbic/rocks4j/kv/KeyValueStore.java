@@ -16,7 +16,7 @@ import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerializationExcepti
  * @param <K> Key type.
  * @param <V> Value type.
  */
-public interface KeyValueRepository<K, V> {
+public interface KeyValueStore<K, V> {
 
     /**
      * Inserts key-value pair into RocksDB.

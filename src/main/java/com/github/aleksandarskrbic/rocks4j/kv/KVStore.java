@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j.repository;
+package com.github.aleksandarskrbic.rocks4j.kv;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.Optional;
 import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConnection;
-import com.github.aleksandarskrbic.rocks4j.kv.KeyValueRepository;
 import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteAllFailedException;
 import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteFailedException;
 import com.github.aleksandarskrbic.rocks4j.kv.exception.FindFailedException;
@@ -28,9 +27,9 @@ import org.slf4j.LoggerFactory;
  * @param <K> Key type.
  * @param <V> Value type.
  */
-public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implements KeyValueRepository<K, V> {
+public class KVStore<K, V> extends RocksDBConnection implements KeyValueStore<K, V> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBKeyValueRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KVStore.class);
 
     private final Mapper<K> keyMapper;
     private final Mapper<V> valueMapper;
@@ -41,7 +40,7 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
      *
      * @param configuration for {@link RocksDBConnection}.
      */
-    public RocksDBKeyValueRepository(final RocksDBConfiguration configuration) {
+    public KVStore(final RocksDBConfiguration configuration) {
         super(configuration);
         this.keyMapper = RocksDBMapperFactory.mapperFor(extractKeyType());
         this.valueMapper = RocksDBMapperFactory.mapperFor(extractValueType());
@@ -53,37 +52,27 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
      * @param keyType for mapper.
      * @param valueType for mapper.
      */
-    public RocksDBKeyValueRepository(
-            final RocksDBConfiguration configuration,
-            final Class<K> keyType,
-            final Class<V> valueType
-    ) {
+    public KVStore(final RocksDBConfiguration configuration, final Class<K> keyType, final Class<V> valueType) {
         super(configuration);
         this.keyMapper = RocksDBMapperFactory.mapperFor(keyType);
         this.valueMapper = RocksDBMapperFactory.mapperFor(valueType);
     }
 
     /**
+     * This constructor should be used if you want custom mappers.
      *
      * @param configuration for {@link RocksDBConnection}.
      * @param keyMapper custom key mapper that implements {@link Mapper}.
      * @param valueMapper custom value mapper that implements {@link Mapper}.
      */
-    public RocksDBKeyValueRepository(
-            final RocksDBConfiguration configuration,
-            final Mapper<K> keyMapper,
-            final Mapper<V> valueMapper
-    ) {
+    public KVStore(final RocksDBConfiguration configuration, final Mapper<K> keyMapper, final Mapper<V> valueMapper) {
         super(configuration);
         this.keyMapper = keyMapper;
         this.valueMapper = valueMapper;
     }
 
     @Override
-    public void save(
-            final K key,
-            final V value
-    ) throws SerializationException, SaveFailedException {
+    public void save(final K key, final V value) throws SerializationException, SaveFailedException {
         try {
             final byte[] serializedKey = keyMapper.serialize(key);
             final byte[] serializedValue = valueMapper.serialize(value);
@@ -197,7 +186,7 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
         final Type superClass = getClass().getGenericSuperclass();
 
         if (superClass instanceof Class<?>) {
-            throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
+            throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information.");
         }
 
         return superClass;
@@ -208,6 +197,6 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
             return (Class<?>) type;
         }
 
-        throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
+        throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information.");
     }
 }

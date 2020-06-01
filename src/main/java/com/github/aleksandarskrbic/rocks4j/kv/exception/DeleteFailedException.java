@@ -9,10 +9,7 @@ public final class DeleteFailedException extends RocksIOException {
         super(message);
     }
 
-    public DeleteFailedException(
-            final String message,
-            final Throwable throwable
-    ) {
+    public DeleteFailedException(final String message, final Throwable throwable) {
         super(message, throwable);
     }
 }

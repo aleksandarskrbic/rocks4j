@@ -9,10 +9,7 @@ public final class SaveFailedException extends RocksIOException {
         super(message);
     }
 
-    public SaveFailedException(
-            final String message,
-            final Throwable throwable
-    ) {
+    public SaveFailedException(final String message, final Throwable throwable) {
         super(message, throwable);
     }
 }

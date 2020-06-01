@@ -6,6 +6,7 @@ import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import static java.nio.file.Files.createDirectories;
 
 /**
@@ -20,11 +21,10 @@ public abstract class RocksDBConnection {
     public RocksDBConnection(final RocksDBConfiguration configuration) {
         RocksDB.loadLibrary();
 
-        try {
-            final Options options = new Options().setCreateIfMissing(true);
-            final String root = System.getProperty("user.dir");
-            final String rocksDirectory = root + configuration.url();
-            final Path path = Paths.get(rocksDirectory);
+        try (final Options options = new Options().setCreateIfMissing(true)) {
+            final String home = System.getProperty("user.home");
+            final String url = home + "/" + configuration.url();
+            final Path path = Paths.get(url);
             createDirectories(path);
             rocksDB = RocksDB.open(options, path.toString());
         } catch (final Exception exception) {

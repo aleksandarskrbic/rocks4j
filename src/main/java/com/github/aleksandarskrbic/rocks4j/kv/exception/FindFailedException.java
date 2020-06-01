@@ -9,10 +9,7 @@ public final class FindFailedException extends RocksIOException {
         super(message);
     }
 
-    public FindFailedException(
-            final String message,
-            final Throwable throwable
-    ) {
+    public FindFailedException(final String message, final Throwable throwable) {
         super(message, throwable);
     }
 }
