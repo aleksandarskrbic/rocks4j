@@ -1,9 +1,12 @@
-package com.github.aleksandarskrbic.rocks4j.core;
+package com.github.aleksandarskrbic.rocks4j.store;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
+import com.github.aleksandarskrbic.rocks4j.core.KeyValueStore;
+import com.github.aleksandarskrbic.rocks4j.core.RocksDBConfiguration;
+import com.github.aleksandarskrbic.rocks4j.core.RocksDBConnection;
 import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteAllFailedException;
 import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteFailedException;
 import com.github.aleksandarskrbic.rocks4j.core.exception.FindFailedException;

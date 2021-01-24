@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j.core;
+package com.github.aleksandarskrbic.rocks4j.store;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -8,6 +8,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.github.aleksandarskrbic.rocks4j.core.AsyncKeyValueStore;
+import com.github.aleksandarskrbic.rocks4j.core.RocksDBConfiguration;
+import com.github.aleksandarskrbic.rocks4j.core.RocksDBConnection;
 import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteAllFailedException;
 import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteFailedException;
 import com.github.aleksandarskrbic.rocks4j.core.exception.FindFailedException;
@@ -26,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * @param <K> Key type.
  * @param <V> Value type.
  */
-public abstract class AsyncKVStore<K, V> implements AsyncKeyValueStore<K, V> {
+public class AsyncKVStore<K, V> implements AsyncKeyValueStore<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AsyncKVStore.class);
 

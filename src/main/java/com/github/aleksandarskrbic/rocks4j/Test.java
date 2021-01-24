@@ -1,15 +1,13 @@
 package com.github.aleksandarskrbic.rocks4j;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
-import com.github.aleksandarskrbic.rocks4j.core.AsyncKVStore;
+import com.github.aleksandarskrbic.rocks4j.store.AsyncKVStore;
 import com.github.aleksandarskrbic.rocks4j.core.RocksDBConfiguration;
 import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteAllFailedException;
 import com.github.aleksandarskrbic.rocks4j.core.exception.FindFailedException;
 import com.github.aleksandarskrbic.rocks4j.core.exception.SaveFailedException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerDeException;
-import com.github.aleksandarskrbic.rocks4j.core.KVStore;
 
 public class Test {
 
