@@ -1,7 +1,8 @@
-package com.github.aleksandarskrbic.rocks4j.configuration;
+package com.github.aleksandarskrbic.rocks4j.core;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.slf4j.Logger;

@@ -1,11 +1,11 @@
-package com.github.aleksandarskrbic.rocks4j.kv;
+package com.github.aleksandarskrbic.rocks4j.core;
 
 import java.util.Collection;
 import java.util.Optional;
-import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteAllFailedException;
-import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteFailedException;
-import com.github.aleksandarskrbic.rocks4j.kv.exception.FindFailedException;
-import com.github.aleksandarskrbic.rocks4j.kv.exception.SaveFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteAllFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.FindFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.SaveFailedException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerDeException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerializationException;
@@ -16,7 +16,7 @@ import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerializationExcepti
  * @param <K> Key type.
  * @param <V> Value type.
  */
-public interface KeyValueRepository<K, V> {
+public interface KeyValueStore<K, V> {
 
     /**
      * Inserts key-value pair into RocksDB.

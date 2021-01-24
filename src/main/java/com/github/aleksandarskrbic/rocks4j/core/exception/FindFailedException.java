@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j.kv.exception;
+package com.github.aleksandarskrbic.rocks4j.core.exception;
 
 /**
  * {@link FindFailedException} is thrown when there is a problem with retrieving an entity from a repository.

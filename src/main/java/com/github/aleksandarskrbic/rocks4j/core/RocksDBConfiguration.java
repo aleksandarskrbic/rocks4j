@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j.configuration;
+package com.github.aleksandarskrbic.rocks4j.core;
 
 /**
  * Configuration class for RocksDB.
