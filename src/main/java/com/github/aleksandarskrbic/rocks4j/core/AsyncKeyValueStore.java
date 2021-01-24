@@ -1,13 +1,16 @@
-package com.github.aleksandarskrbic.rocks4j.kv;
+package com.github.aleksandarskrbic.rocks4j.core;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+
+import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteAllFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.FindFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.SaveFailedException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerDeException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerializationException;
-import com.google.common.annotations.Beta;
-import org.rocksdb.RocksDBException;
 
 /**
  *  Interface that defines asynchronous operations against Key-Value Store.
@@ -15,8 +18,7 @@ import org.rocksdb.RocksDBException;
  * @param <K> Key type.
  * @param <V> Value type.
  */
-@Beta
-public interface AsyncKeyValueRepository<K, V> {
+public interface AsyncKeyValueStore<K, V> {
 
     /**
      * Inserts key-value pair into RocksDB asynchronously.
@@ -25,9 +27,9 @@ public interface AsyncKeyValueRepository<K, V> {
      * @param value that should be persisted.
      * @return CompletableFuture of Void.
      * @throws SerializationException when it's not possible to serialize entity.
-     * @throws RocksDBException when it's not possible to persist entity.
+     * @throws SaveFailedException when it's not possible to persist entity.
      */
-    CompletableFuture<Void> save(K key, V value) throws SerializationException, RocksDBException;
+    CompletionStage<Void> save(K key, V value) throws SerializationException, SaveFailedException;
 
     /**
      * Try to find value for a given key asynchronously.
@@ -35,9 +37,9 @@ public interface AsyncKeyValueRepository<K, V> {
      * @param key of entity that should be retrieved.
      * @return CompletableFuture of Optional of entity.
      * @throws SerDeException when it's not possible to serialize/deserialize entity.
-     * @throws RocksDBException when it's not possible to retrieve a wanted entity.
+     * @throws FindFailedException when it's not possible to retrieve a wanted entity.
      */
-    CompletableFuture<Optional<V>> findByKey(K key) throws SerDeException, RocksDBException;
+    CompletionStage<Optional<V>> findByKey(K key) throws SerDeException, FindFailedException;
 
     /**
      * Try to find all entities from repository asynchronously.
@@ -45,7 +47,7 @@ public interface AsyncKeyValueRepository<K, V> {
      * @return CompletableFuture of Collection of entities.
      * @throws DeserializationException when it's not possible to deserialize entity.
      */
-    CompletableFuture<Collection<V>> findAll() throws DeserializationException;
+    CompletionStage<Collection<V>> findAll() throws DeserializationException;
 
     /**
      * Delete entity for a given key asynchronously..
@@ -53,15 +55,15 @@ public interface AsyncKeyValueRepository<K, V> {
      * @param key of entity that should be deleted.
      * @return CompletableFuture of Void.
      * @throws SerializationException when it's not possible to serialize entity.
-     * @throws RocksDBException when it's not possible to delete a wanted entity.
+     * @throws DeleteFailedException when it's not possible to delete a wanted entity.
      */
-    CompletableFuture<Void> deleteByKey(K key) throws SerializationException, RocksDBException;
+    CompletionStage<Void> deleteByKey(K key) throws SerializationException, DeleteFailedException;
 
     /**
      * Deletes all entities from RocksDB asynchronously.
      *
      * @return CompletableFuture of Void.
-     * @throws RocksDBException when it's not possible to delete entity.
+     * @throws DeleteAllFailedException when it's not possible to delete entity.
      */
-    CompletableFuture<Void> deleteAll() throws RocksDBException;
+    CompletionStage<Void> deleteAll() throws DeleteAllFailedException;
 }

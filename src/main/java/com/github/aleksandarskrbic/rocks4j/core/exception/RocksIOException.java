@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j.kv.exception;
+package com.github.aleksandarskrbic.rocks4j.core.exception;
 
 /**
  * Base class for exceptions related to IO operations against Key-Value Store.

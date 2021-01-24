@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j.kv.exception;
+package com.github.aleksandarskrbic.rocks4j.core.exception;
 
 /**
  * {@link SaveFailedException} is thrown when there is a problem with saving an entity to a repository.

@@ -1,19 +1,16 @@
-package com.github.aleksandarskrbic.rocks4j.repository;
+package com.github.aleksandarskrbic.rocks4j.core;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Optional;
-import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConfiguration;
-import com.github.aleksandarskrbic.rocks4j.configuration.RocksDBConnection;
-import com.github.aleksandarskrbic.rocks4j.kv.KeyValueRepository;
-import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteAllFailedException;
-import com.github.aleksandarskrbic.rocks4j.kv.exception.DeleteFailedException;
-import com.github.aleksandarskrbic.rocks4j.kv.exception.FindFailedException;
-import com.github.aleksandarskrbic.rocks4j.kv.exception.SaveFailedException;
+import java.util.*;
+
+import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteAllFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.FindFailedException;
+import com.github.aleksandarskrbic.rocks4j.core.exception.SaveFailedException;
+import com.github.aleksandarskrbic.rocks4j.mapper.JsonMapper;
 import com.github.aleksandarskrbic.rocks4j.mapper.Mapper;
-import com.github.aleksandarskrbic.rocks4j.mapper.RocksDBMapperFactory;
+import com.github.aleksandarskrbic.rocks4j.mapper.MapperFactory;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.DeserializationException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerDeException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerializationException;
@@ -28,23 +25,23 @@ import org.slf4j.LoggerFactory;
  * @param <K> Key type.
  * @param <V> Value type.
  */
-public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implements KeyValueRepository<K, V> {
+public class KVStore<K, V> extends RocksDBConnection implements KeyValueStore<K, V> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBKeyValueRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KVStore.class);
 
     private final Mapper<K> keyMapper;
     private final Mapper<V> valueMapper;
 
     /**
      * Default constructor which automatically infers key and value types needed for mapper creation.
-     * Uses {@link com.github.aleksandarskrbic.rocks4j.mapper.RocksDBMapper}.
+     * Uses {@link JsonMapper}.
      *
      * @param configuration for {@link RocksDBConnection}.
      */
-    public RocksDBKeyValueRepository(final RocksDBConfiguration configuration) {
+    public KVStore(final RocksDBConfiguration configuration) {
         super(configuration);
-        this.keyMapper = RocksDBMapperFactory.mapperFor(extractKeyType());
-        this.valueMapper = RocksDBMapperFactory.mapperFor(extractValueType());
+        this.keyMapper = MapperFactory.createFor(extractKeyType());
+        this.valueMapper = MapperFactory.createFor(extractValueType());
     }
 
     /**
@@ -53,14 +50,14 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
      * @param keyType for mapper.
      * @param valueType for mapper.
      */
-    public RocksDBKeyValueRepository(
+    public KVStore(
             final RocksDBConfiguration configuration,
             final Class<K> keyType,
             final Class<V> valueType
     ) {
         super(configuration);
-        this.keyMapper = RocksDBMapperFactory.mapperFor(keyType);
-        this.valueMapper = RocksDBMapperFactory.mapperFor(valueType);
+        this.keyMapper = MapperFactory.createFor(keyType);
+        this.valueMapper = MapperFactory.createFor(valueType);
     }
 
     /**
@@ -69,7 +66,7 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
      * @param keyMapper custom key mapper that implements {@link Mapper}.
      * @param valueMapper custom value mapper that implements {@link Mapper}.
      */
-    public RocksDBKeyValueRepository(
+    public KVStore(
             final RocksDBConfiguration configuration,
             final Mapper<K> keyMapper,
             final Mapper<V> valueMapper
@@ -117,24 +114,21 @@ public class RocksDBKeyValueRepository<K, V> extends RocksDBConnection implement
 
     @Override
     public Collection<V> findAll() throws DeserializationException {
-        final Collection<V> result = new LinkedList<>();
-        final RocksIterator iterator = rocksDB.newIterator();
-        iterator.seekToFirst();
-
-        try {
+        try (final RocksIterator iterator = rocksDB.newIterator()) {
+            final Collection<V> result = new ArrayList<>();
+            iterator.seekToFirst();
+            
             while (iterator.isValid()) {
                 final V value = valueMapper.deserialize(iterator.value());
                 result.add(value);
                 iterator.next();
             }
+
+            return result;
         } catch (final DeserializationException exception) {
             LOGGER.error("Deserialization exception occurred during findAll operation. {}", exception.getMessage());
             throw exception;
-        } finally {
-            iterator.close();
         }
-
-        return result;
     }
 
     @Override

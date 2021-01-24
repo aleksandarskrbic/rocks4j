@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j.kv.exception;
+package com.github.aleksandarskrbic.rocks4j.core.exception;
 
 /**
  * {@link DeleteAllFailedException} is thrown when there is a problem with deleting all entities from a repository.

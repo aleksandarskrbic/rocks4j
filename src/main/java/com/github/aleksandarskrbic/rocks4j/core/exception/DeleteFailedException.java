@@ -1,4 +1,4 @@
-package com.github.aleksandarskrbic.rocks4j.kv.exception;
+package com.github.aleksandarskrbic.rocks4j.core.exception;
 
 /**
  * {@link DeleteFailedException} is thrown when there is a problem with deleting an entity from a repository.
