@@ -1,7 +1,6 @@
 package com.github.aleksandarskrbic.rocks4j;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 import com.github.aleksandarskrbic.rocks4j.core.AsyncKVStore;
 import com.github.aleksandarskrbic.rocks4j.core.RocksDBConfiguration;
@@ -9,9 +8,8 @@ import com.github.aleksandarskrbic.rocks4j.core.exception.DeleteAllFailedExcepti
 import com.github.aleksandarskrbic.rocks4j.core.exception.FindFailedException;
 import com.github.aleksandarskrbic.rocks4j.core.exception.SaveFailedException;
 import com.github.aleksandarskrbic.rocks4j.mapper.exception.SerDeException;
-import com.github.aleksandarskrbic.rocks4j.core.KVStore;
 
-public class Test {
+public class TestExample {
 
     public static void main(final String[] args) throws SerDeException, SaveFailedException, DeleteAllFailedException, FindFailedException {
         final RocksDBConfiguration rocksDBConfiguration = new RocksDBConfiguration("/src/main/resources/data/repositories", "db");
